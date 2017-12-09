@@ -7,6 +7,7 @@ int fan_speed;
 int target_temp;
 bool light = false;
 int light_pin = 8;
+int vent_fan_pin = 11;
 int last_temp_reading;
 long int display_last_update;
 float temp_term;
@@ -15,13 +16,13 @@ int hum_HTU;
 int mode = 0;
 String modes[2] = {"HEAT", "COLD"};
 int lights_state = 0;
-String lights[2] = {"ON", "OFF"};
+String lights[2] = {"OFF", "ON"};
 String get_menu_line(String input_word, int * input_number, String mark);
 String get_menu_temp(String input_word, int * input_number, int * input_number2);
 String get_mode();
-String get_line_str(String input_word, String state);
-String menu_item_list[3][6] = {{"5","   3D printer box", get_menu_temp("Temperature",&temp_HTU, &target_temp), get_menu_line("Fan",&fan_speed, "%"), get_menu_line("humidity" ,&hum_HTU, "%"), get_menu_line("Gases",123, " ")},
-  {"4","Return", get_mode(), get_line_str("Lights",lights[lights_state]) ,"Settings"},
+String get_line_str(String input_word, String * state);
+String menu_item_list[3][6] = {{"5","   3D printer box", get_menu_temp("Temperature",&temp_HTU, &target_temp), get_menu_line("Fan",&fan_speed, " "), get_menu_line("humidity" ,&hum_HTU, "%"), get_menu_line("Gases",123, " ")},
+  {"4","Return", get_mode(), get_line_str("Lights", &lights[lights_state]) ,"Settings"},
   {"3","Return", get_menu_line("Max temp",&max_temp, " ") , "Save"}
   };
   
@@ -31,7 +32,8 @@ void setup(void) {
   encoder_prepare();
   menu = 0;
   pos = 0;
-  //pinMode(light_pin, OUTPUT);
+  pinMode(light_pin, OUTPUT);
+  pinMode(vent_fan_pin, OUTPUT);
   //thermistor
   analogReference(EXTERNAL);
 
@@ -52,6 +54,7 @@ void loop(void) {
   read_term();
   read_htu();
   last_temp_reading = millis();
+  keep_target();
   }
   if ((millis()-display_last_update) > 500) {
     display_update();

@@ -53,3 +53,14 @@ void read_term(){
   //Serial.print(int(temp_term));
   //Serial.println(" *C");
 }
+void keep_target(){
+  if(mode == 1){
+    digitalWrite(vent_fan_pin, HIGH);
+    
+  }
+  else{
+    digitalWrite(vent_fan_pin, LOW);
+    
+}
+}
+

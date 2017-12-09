@@ -52,22 +52,23 @@ String get_mode(){
 return  "Switch mode   "+ modes[mode];
 }
 
-String get_line_str(String input_word, String state){
+String get_line_str(String input_word, String * state){
    String final_str = input_word;
-  for(int i = 0; i < (128/6)-(input_word.length()+2+state.length()); i++){
+  for(int i = 0; i < (128/6)-(input_word.length()+3+(*state).length()); i++){
 final_str += " ";
   }
-final_str += state;
+final_str += *state;
+return final_str;
 }
 void display_update(){
   
     menu_item_list[0][2] = get_menu_temp("Temperature", &temp_HTU, &target_temp);
-    menu_item_list[0][3] = get_menu_line("Fan",&fan_speed, "%");
+    menu_item_list[0][3] = get_menu_line("Fan",&fan_speed, " ");
     menu_item_list[0][4] = get_menu_line("Humidity" ,&hum_HTU, "%");
     menu_item_list[0][5] = get_menu_line("Gases",123, " ");
     menu_item_list[2][2] = get_menu_line("Max temp",&max_temp, " ");
     menu_item_list[1][2] = get_mode();
-    menu_item_list[1][3] = get_line_str("Lights", lights[lights_state]);
+    menu_item_list[1][3] = get_line_str("Lights", &lights[lights_state]);
     myOled.firstPage();
     do {
       draw_screen();

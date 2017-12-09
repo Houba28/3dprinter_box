@@ -63,7 +63,6 @@ void PinB(){
 
 void read_encoder(){
      if(oldEncPos != pos) {
-    Serial.println(pos);
     oldEncPos = pos;
   }
   stavSW = digitalRead(pinSW);
@@ -83,7 +82,7 @@ void read_encoder(){
       switch_mode();
     }
     else if(menu == 1 &&  pos == 2){
-     //switch_lights(); 
+     switch_lights(); 
     }
     else if(menu == 2 &&  pos == 2){
       EEPROM.put(0,max_temp);
